@@ -4,20 +4,26 @@ namespace TodoList.Models
 {
     public class User
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
-        public ICollection<TodoTask> TodoTasks { get; set; }
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+        public IList<TodoTaskList> TodoTaskLists { get; set; } = new List<TodoTaskList>();
+        public IList<TodoTask>? UserTodoTasks { get; set; }
 
         public User() { }
 
-        public User(string firstName, string lastName)
+        public User(string firstName, string lastName, string email, string password)
         {
             FirstName = firstName;
             LastName = lastName;
-            TodoTasks = new List<TodoTask>();
+            Email = email;
+            Password = password;
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TodoList.Data;
 
@@ -11,9 +12,11 @@ using TodoList.Data;
 namespace TodoList.Migrations
 {
     [DbContext(typeof(TodoListDbContext))]
-    partial class TodoListDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230907164847_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,9 +82,6 @@ namespace TodoList.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(20)");
 
-                    b.Property<int>("TodoTaskListId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -89,8 +89,6 @@ namespace TodoList.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TodoTaskListId");
 
                     b.HasIndex("UserId");
 
@@ -152,6 +150,21 @@ namespace TodoList.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("TodoTaskTodoTaskList", b =>
+                {
+                    b.Property<int>("TodoTaskListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TodoTasksId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TodoTaskListId", "TodoTasksId");
+
+                    b.HasIndex("TodoTasksId");
+
+                    b.ToTable("TodoTaskTodoTaskList", (string)null);
+                });
+
             modelBuilder.Entity("TagTodoTask", b =>
                 {
                     b.HasOne("TodoList.Models.Tag", null)
@@ -169,19 +182,11 @@ namespace TodoList.Migrations
 
             modelBuilder.Entity("TodoList.Models.TodoTask", b =>
                 {
-                    b.HasOne("TodoList.Models.TodoTaskList", "TodoTaskList")
-                        .WithMany("TodoTasks")
-                        .HasForeignKey("TodoTaskListId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("TodoList.Models.User", "User")
                         .WithMany("UserTodoTasks")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("TodoTaskList");
 
                     b.Navigation("User");
                 });
@@ -191,15 +196,25 @@ namespace TodoList.Migrations
                     b.HasOne("TodoList.Models.User", "User")
                         .WithMany("TodoTaskLists")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TodoList.Models.TodoTaskList", b =>
+            modelBuilder.Entity("TodoTaskTodoTaskList", b =>
                 {
-                    b.Navigation("TodoTasks");
+                    b.HasOne("TodoList.Models.TodoTaskList", null)
+                        .WithMany()
+                        .HasForeignKey("TodoTaskListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TodoList.Models.TodoTask", null)
+                        .WithMany()
+                        .HasForeignKey("TodoTasksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TodoList.Models.User", b =>

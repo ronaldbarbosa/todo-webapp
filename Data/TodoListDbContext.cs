@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using TodoList.Models;
-using TodoList.Models.ViewModels;
 
 namespace TodoList.Data
 {
@@ -8,8 +8,14 @@ namespace TodoList.Data
     {
         public TodoListDbContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<TodoTask> TodoTasks { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<TodoTask> TodoTask { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Tag> Tag { get; set; }
+        public DbSet<TodoTaskList> TodoTaskList { get; set; }
     }
 }
