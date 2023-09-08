@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TodoList.Data;
 
@@ -9,6 +10,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<TodoListDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("LocalDb")));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<TodoListDbContext>();
 
 var app = builder.Build();
 
@@ -25,6 +29,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
