@@ -7,7 +7,7 @@
         public string Color { get; set; }
 
         public IList<TodoTask> TodoTasks { get; set; } = new List<TodoTask>();
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
 
         public TodoTaskList()

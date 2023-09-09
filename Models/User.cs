@@ -1,29 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace TodoList.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
+        [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
+        [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
         public IList<TodoTaskList> TodoTaskLists { get; set; } = new List<TodoTaskList>();
         public IList<TodoTask>? UserTodoTasks { get; set; }
 
         public User() { }
 
-        public User(string firstName, string lastName, string email, string password)
+        public User(string firstName, string lastName)
         {
             FirstName = firstName;
             LastName = lastName;
-            Email = email;
-            Password = password;
         }
     }
 }

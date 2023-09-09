@@ -15,7 +15,7 @@ namespace TodoList.Models
         public DateTime DueDate { get; set; }
         public bool Finished { get; set; } = false;
         public User User { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public IList<Tag>? Tags { get; set; }
         public TodoTaskList? TodoTaskList { get; set; }
         public int TodoTaskListId { get; set; }

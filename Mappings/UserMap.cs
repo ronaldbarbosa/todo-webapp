@@ -14,12 +14,6 @@ namespace TodoList.Mappings
             builder.Property(u => u.LastName)
                 .HasColumnType("varchar(20)");
 
-            builder.Property(u => u.Email)
-                .HasColumnType("varchar(50)");
-
-            builder.Property(u => u.Password)
-                .HasColumnType("varchar(256)");
-
 
             builder.HasMany(u => u.UserTodoTasks)
                 .WithOne(t => t.User)
