@@ -1,26 +1,33 @@
 ﻿@model TodoList.Models.ViewModels.RegisterViewModel
+
 @{
     ViewData["Title"] = "Register";
+    Layout = "/Views/Shared/_LayoutNotLoggedIn.cshtml";
 }
 
-<h3>Registrar Usuário</h3>
+<div>
+    <h3 class="fw-bolder">Registrar Usuário</h3>
 
-<form method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="ConfirmPassword"></label>
-        <input asp-for="ConfirmPassword" class="form-control" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Registrar</button>
-</form>
+    <form method="post" class="">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-floating mb-3">
+            <input asp-for="Email" class="form-control" />
+            <label asp-for="Email"></label>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Password" class="form-control" />
+            <label asp-for="Password"></label>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <label asp-for="ConfirmPassword"></label>
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+        <div class="d-flex flex-column">
+            <button type="submit" class="btn btn-primary mt-3 w-100 mb-3">Registrar</button>
+            <a asp-action="Login" class="btn btn-secondary w-100">Voltar</a>
+        </div>
+    </form>
+</div>
