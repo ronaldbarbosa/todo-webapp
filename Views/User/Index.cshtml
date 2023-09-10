@@ -1,0 +1,99 @@
+﻿@model TodoList.Models.ViewModels.TodoTasksAndListViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@{
+    ViewData["Title"] = "Suas Tarefas";
+}
+
+<div class="h-100">
+    <div class="d-flex h-100">
+        <div 
+            class="d-flex flex-column justify-content-between w-25 h-100 p-3 m-3 rounded-3"
+             style="background-color: #f4f4f4">
+            <div>
+                <div class="mt-3 text-center">
+                    @if (Model.User.FirstName != null)
+                    {
+                        <h2 class="fs-4 fw-bold">Bem-vindo à sua lista de tarefas, @Model.User.FirstName!</h2>
+                    }
+                    else
+                    {
+                        <h2 class="fs-4 fw-bold">Bem-vindo à sua lista de tarefas. <a asp-action="Edit">Clique aqui</a> para concluir seu cadastro!</h2>
+                    }
+                </div>
+                <div class="">
+                    <h3>Tarefas</h3>
+                    <div>
+                        <h4 class="fs-5">Hoje</h4>
+                        @if (Model.TodoTasks.Count > 0)
+                        {
+                            
+                        }
+                        else
+                        {
+                            <span>Nenhuma tarefa cadastrada!</span>
+                        }
+                    </div>
+                    <div>
+                        <h4 class="fs-5 mt-2">Próximas</h4>
+                        @if (Model.TodoTasks.Count > 0)
+                        {
+
+                        }
+                        else
+                        {
+                            <span>Nenhuma tarefa cadastrada!</span>
+                        }
+                    </div>
+                </div>
+                <div class="mt-5">
+                    <h3>Listas</h3>
+                    @if (Model.TodoTaskLists.Count > 0)
+                    {
+                        @foreach (var todoTaskList in Model.TodoTaskLists)
+                        {
+                            <span>@todoTaskList.Title</span>
+                        }
+                    }
+                    else
+                    {
+                        <span>Nenhuma lista de tarefas criada!</span>
+                    }
+                </div>
+                <div class="mt-5">
+                    <h3>Tags</h3>
+                    <div class="d-flex">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <span class="btn border me-2">@tag.Title</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="dropend mb-3">
+                <button class="btn btn-success dropdown-toggle rounded-circle py-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @Model.User.FirstName[0]@Model.User.LastName[0]
+                </button>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-item text-center">
+                        @Model.User.FirstName
+                        @Model.User.LastName
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    <li class="dropdown-item">
+                        <a asp-action="Edit" class="btn">Editar Informações</a>
+                    </li>
+                    <li class="dropdown-item">
+                        <form method="post" asp-controller="Account" asp-action="Logout">
+                            <button type="submit" class="btn">
+                                Sair
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex flex-column w-75 m-3 rounded-3">    
+        </div>
+    </div>
+</div>
