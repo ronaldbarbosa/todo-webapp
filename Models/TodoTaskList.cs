@@ -14,10 +14,12 @@
         {
         }
 
-        public TodoTaskList(string title, string color)
+        public TodoTaskList(int id, string title, string color, string userId)
         {
+            Id = id;
             Title = title;
             Color = color;
+            UserId = userId;
         }
     }
 }

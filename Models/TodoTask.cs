@@ -18,21 +18,22 @@ namespace TodoList.Models
         public string UserId { get; set; }
         public IList<Tag>? Tags { get; set; }
         public TodoTaskList? TodoTaskList { get; set; }
-        public int TodoTaskListId { get; set; }
+        public int? TodoTaskListId { get; set; }
 
         public TodoTask()
         {
         }
 
-        public TodoTask(string title, string description)
+        public TodoTask(int id, string title, string description, string userId)
         {
+            Id = id;
+            UserId = userId;
             Title = title;
             Description = description;
         }
 
-        public TodoTask(string title, string description, User user, IList<Tag>? tags, TodoTaskList? todoTaskList, int todoTaskListId) : this(title, description)
+        public TodoTask(int id, string title, string description, string userId, IList<Tag>? tags, TodoTaskList? todoTaskList, int? todoTaskListId) : this(id, title, description, userId)
         {
-            User = user;
             Tags = tags;
             TodoTaskList = todoTaskList;
             TodoTaskListId = todoTaskListId;

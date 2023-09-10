@@ -9,10 +9,28 @@ namespace TodoList.Controllers
     public class UserController : Controller
     {
         private readonly UserService _userService;
+        private readonly TodoTaskService _todoTaskService;
+        private readonly TodoTaskListService _todoTaskListService;
+        private readonly TagService _tagService;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, TodoTaskService todoTaskService, TodoTaskListService todoTaskListService, TagService tagService)
         {
             _userService = userService;
+            _todoTaskService = todoTaskService;
+            _todoTaskListService = todoTaskListService;
+            _tagService = tagService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var viewModel = new TodoTasksAndListViewModel
+            {
+                User = await _userService.GetUserAsync(User.Identity.Name),
+                TodoTasks = await _todoTaskService.GetTodoTasksAsync(User.Identity.Name),
+                TodoTaskLists = await _todoTaskListService.GetTodotaskListAsync(User.Identity.Name),
+                Tags = await _tagService.GetTagsAsync()
+            };
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Edit()
@@ -28,7 +46,7 @@ namespace TodoList.Controllers
             if (ModelState.IsValid) 
             {
                 await _userService.EditUserAsync(model, User.Identity.Name);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "User");
             }
             return View(model);
         }

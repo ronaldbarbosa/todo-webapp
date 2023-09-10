@@ -10,6 +10,11 @@ namespace TodoList.Mappings
         {
             builder.Property(t => t.Title)
                 .HasColumnType("varchar(20)");
+
+            builder.HasData(
+                new Tag(1, "Study"),
+                new Tag(2, "Work")
+            );
         }
     }
 }

@@ -17,6 +17,9 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<TodoListDbContext>();
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<TodoTaskService>();
+builder.Services.AddScoped<TodoTaskListService>();
+builder.Services.AddScoped<TagService>();
 
 var app = builder.Build();
 

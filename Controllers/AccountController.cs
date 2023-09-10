@@ -32,7 +32,7 @@ namespace TodoList.Controllers
                 if (result.Succeeded) 
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "User");
                 }
 
                 foreach (var error in result.Errors)
@@ -58,7 +58,7 @@ namespace TodoList.Controllers
 
                 if (result.Succeeded) 
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "User");
                 }
 
                 ModelState.AddModelError(string.Empty, "Login Inválido");

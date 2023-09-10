@@ -18,6 +18,16 @@ namespace TodoList.Mappings
             builder.HasMany(t => t.Tags)
                 .WithMany(t => t.TodoTasks)
                 .UsingEntity(e => e.ToTable("TodoTaskTag"));
+
+
+            builder.HasData(
+                new TodoTask(
+                    1,
+                    "Study",
+                    "Study AspNet Core MVC all weekend",
+                    "50d0af67-12f6-4c63-90e0-7981b9538893"
+                )
+            );
         }
     }
 }
