@@ -45,6 +45,10 @@ namespace TodoList.Controllers
 
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated == true)
+            {
+                return RedirectToAction("Index", "User");
+            }
             return View();
         }
 
