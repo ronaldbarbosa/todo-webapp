@@ -13,6 +13,12 @@ namespace TodoList.Services
             _dbContext = dbContext;
         }
 
+        public async Task<Tag> GetTagAsync(int id)
+        {
+            var tag = await _dbContext.Tag.FindAsync(id);
+            return tag;
+        }
+
         public async Task<IList<Tag>> GetTagsAsync()
         {
             return await _dbContext.Tag.ToListAsync();
@@ -22,6 +28,22 @@ namespace TodoList.Services
         {
             await _dbContext.Tag.AddAsync(tag);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task EditTagAsync(Tag tag)
+        {
+            _dbContext.Tag.Update(tag);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteTagAsync(int id)
+        {
+            var tag = await _dbContext.Tag.FindAsync(id);
+            if (tag != null)
+            {
+                _dbContext.Tag.Remove(tag);
+                await _dbContext.SaveChangesAsync();
+            }
         }
     }
 }

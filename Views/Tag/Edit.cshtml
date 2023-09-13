@@ -1,0 +1,19 @@
+﻿@model TodoList.Models.ViewModels.TagEditViewModel
+
+@{
+    ViewData["Title"] = "Editar Tag";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mt-3">
+        <input type="submit" value="Save" class="btn btn-success" />
+    </div>
+</form>

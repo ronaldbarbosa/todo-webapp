@@ -1,0 +1,33 @@
+﻿@model IList<TodoList.Models.Tag>
+
+@{
+    ViewData["Title"] = "Suas Tags";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tag in Model)
+        {
+            <tr>
+                <td>
+                    @tag.Title
+                </td>
+                <td class="d-flex">
+                    <a asp-action="Edit" asp-route-id="@tag.Id" class="btn btn-outline-secondary">Editar</a>
+                    <form asp-action="Delete" asp-route-id="@tag.Id" method="post">
+                        <input type="hidden" asp-for="@tag.Id" />
+                        <input type="submit" value="Delete" class="btn btn-outline-danger" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

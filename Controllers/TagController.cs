@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoList.Models;
+using TodoList.Models.ViewModels;
 using TodoList.Services;
 
 namespace TodoList.Controllers
@@ -13,6 +14,12 @@ namespace TodoList.Controllers
             _tagService = tagService;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var tags = await _tagService.GetTagsAsync();
+            return View(tags);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(string title)
         {
@@ -24,32 +31,38 @@ namespace TodoList.Controllers
             return Json(new { result = "Tag adicionada com sucesso!" } );
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id)
         {
-            try
+            var tag = await _tagService.GetTagAsync(id);
+            if (tag == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+
+            var viewModel = new TagEditViewModel { Id = tag.Id, Title = tag.Title };
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, TagEditViewModel viewModel)
         {
-            try
+            if (ModelState.IsValid)
             {
+                var tag = await _tagService.GetTagAsync(id);
+                tag.Title = viewModel.Title;
+                await _tagService.EditTagAsync(tag);
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            await _tagService.DeleteTagAsync(Id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
