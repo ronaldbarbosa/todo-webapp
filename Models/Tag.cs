@@ -6,6 +6,11 @@
         public string Title { get; set; }
         public IList<TodoTask>? TodoTasks { get; set; } = new List<TodoTask>();
 
+        public Tag(string title)
+        {
+            Title = title;
+        }
+
         public Tag(int id, string title)
         {
             Id = id;

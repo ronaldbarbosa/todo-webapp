@@ -67,6 +67,33 @@
                         {
                             <span class="btn border me-2">@tag.Title</span>
                         }
+                        <div class="d-flex align-items-center mx-2">
+                            <button type="button" class="btn text-success" data-bs-toggle="modal" data-bs-target="#modalTag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalTag" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Criar nova tag</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span class="form-label">Título</span>
+                                        <input type="text" class="form-control" id="valorTag" value="" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                        <button type="button" id="valorTagBtn" class="btn btn-success">Criar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -97,3 +124,28 @@
         </div>
     </div>
 </div>
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Pegar o botão do modal para monitorar o evento de click
+        $("#valorTagBtn").click(function () {
+            var valorTag = $("#valorTag").val();
+            console.log(valorTag)
+            $.ajax({
+                url: "/Tag/Create",
+                type: "POST",
+                data: { title: valorTag },
+                success: function (result) {
+                    $("#modalTag").modal("hide");
+                    alertresult)
+                    location.reload();
+                },
+                error: function (error) {
+                    alert("Ocorreu um erro na criação da tag. \n", error);
+                    console.log(error);
+                }
+            });
+        });
+    })
+</script>
