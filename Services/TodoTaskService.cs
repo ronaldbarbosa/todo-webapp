@@ -19,5 +19,10 @@ namespace TodoList.Services
             return tasks;
         }
 
+        public async Task CreateTodoTaskAsync(TodoTask todoTask)
+        {
+            await _dbContext.TodoTask.AddAsync(todoTask);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

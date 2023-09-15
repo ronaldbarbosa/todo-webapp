@@ -27,7 +27,7 @@ namespace TodoList.Controllers
             {
                 User = await _userService.GetUserAsync(User.Identity.Name),
                 TodoTasks = await _todoTaskService.GetTodoTasksAsync(User.Identity.Name),
-                TodoTaskLists = await _todoTaskListService.GetTodotaskListAsync(User.Identity.Name),
+                TodoTaskLists = await _todoTaskListService.GetTodoTaskListAsync(User.Identity.Name),
                 Tags = await _tagService.GetTagsAsync()
             };
             return View(viewModel);

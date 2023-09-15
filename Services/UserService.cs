@@ -20,6 +20,12 @@ namespace TodoList.Services
             return user;
         }
 
+        public async Task<string> GetUserIdAsync(string username)
+        {
+            var user = await _dbContext.User.FirstOrDefaultAsync(x => x.UserName == username);
+            return user.Id;
+        }
+
         public async Task EditUserAsync(EditUserViewModel viewModel, string username)
         {
             var user = await _dbContext.User.FirstOrDefaultAsync(x => x.UserName == username);

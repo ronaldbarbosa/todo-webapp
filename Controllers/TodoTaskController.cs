@@ -1,75 +1,57 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using TodoList.Models;
+using TodoList.Models.ViewModels;
+using TodoList.Services;
 
 namespace TodoList.Controllers
 {
     public class TodoTaskController : Controller
     {
-        public ActionResult Index()
+        private readonly TodoTaskService _todoTaskService;
+        private readonly TodoTaskListService _todoTaskListService;
+        private readonly UserService _userService;
+
+        public TodoTaskController(TodoTaskService todoTaskService, TodoTaskListService todoTaskListService, UserService userService)
         {
-            return View();
+            _todoTaskService = todoTaskService;
+            _todoTaskListService = todoTaskListService;
+            _userService = userService;
         }
 
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var tasks = await _todoTaskService.GetTodoTasksAsync(User.Identity.Name);
+            return View("_TodoTaskList", tasks);
         }
 
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        public ActionResult Edit(int id)
-        {
-            return View();
+            var username = User.Identity.Name;
+            var lists = await _todoTaskListService.GetTodoTaskListAsync(username);
+            var viewModel = new CreateTodoTaskViewModel() { TodoTaskLists = lists, DueDate = DateTime.Today};
+            return View("_Create", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Create(CreateTodoTaskViewModel viewModel)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+                var userId = await _userService.GetUserIdAsync(User.Identity.Name);
+                var todoTask = new TodoTask() 
+                { 
+                    Title = viewModel.Title,
+                    Description = viewModel.Description,
+                    DueDate = viewModel.DueDate,
+                    UserId = userId,
+                    TodoTaskListId = viewModel.TodoTaskListId
+                };
 
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
+                await _todoTaskService.CreateTodoTaskAsync(todoTask);
+                return RedirectToAction("Index", "User");
             }
-            catch
-            {
-                return View();
-            }
+            return View("_Create", viewModel);
         }
     }
 }

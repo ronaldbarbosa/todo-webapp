@@ -13,7 +13,7 @@ namespace TodoList.Services
             _dbContext = dbContext;
         }
 
-        public async Task<IList<TodoTaskList>> GetTodotaskListAsync(string username)
+        public async Task<IList<TodoTaskList>> GetTodoTaskListAsync(string username)
         {
             var lists = await _dbContext.TodoTaskList.Where(u => u.User.UserName == username).ToListAsync();
             return lists;
