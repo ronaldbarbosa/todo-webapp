@@ -22,8 +22,18 @@
             </div>
         </div>
         <div class="d-flex mb-5 justify-content-around">
-            <a asp-action="Index" class="btn btn-secondary w-25 mx-2">Cancelar</a>
+            <a class="btn btn-secondary w-25 mx-2" id="closeForm">Cancelar</a>
             <button type="submit" class="btn btn-warning w-25">Criar tarefa</button>
         </div>
     </form>
 </div>
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#closeForm").on("click", function (e) {
+            e.preventDefault();
+            $("#part-3").empty();
+        });
+    });
+</script>

@@ -1,0 +1,67 @@
+﻿@model IList<TodoList.Models.TodoTask>
+
+<h2 class="m-5">Próximas <span class="border ms-3 px-3 rounded">@Model.Where(t => t.DueDate.ToShortDateString() != DateTime.Today.ToShortDateString()).Count()</span></h2>
+
+<div class="w-100 btn border p-3" id="createTodoTask">
+    <span>
+        +
+    </span>
+    <span>
+        Adicionar nova tarefa
+    </span>
+</div>
+
+@foreach (var todoTask in Model)
+{
+    if (todoTask.DueDate.ToShortDateString() != DateTime.Today.ToShortDateString())
+    {
+        <div class="d-flex justify-content-between mx-5">
+            <div class="mt-3">
+                <input type="checkbox" />
+                <span class="mx-3">@todoTask.Title</span>
+            </div>
+            <div class="mt-3">
+                <button class="btn todoTaskInfoBtn" data-id="@todoTask.Id">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    }
+}
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#createTodoTask").on("click", function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/TodoTask/Create",
+                method: "GET",
+                success: function (data) {
+                    $("#part-3").html(data);
+                },
+                error: function (error) {
+                    console.error("Erro ao carregar a partial view: " + error);
+                }
+            });
+        });
+
+        $(".todoTaskInfoBtn").on("click", function (e) {
+            e.preventDefault();
+            const todoTaskId = $(this).data("id");
+            $.ajax({
+                url: "/TodoTask/TodoTaskInfo",
+                method: "GET",
+                data: { Id: todoTaskId },
+                success: function (data) {
+                    $("#part-3").html(data);
+                },
+                error: function (error) {
+                    console.error("Erro ao carregar a partial view: " + error);
+                }
+            });
+        });
+    });
+</script>

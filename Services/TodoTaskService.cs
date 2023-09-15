@@ -15,7 +15,7 @@ namespace TodoList.Services
 
         public async Task<IList<TodoTask>> GetTodoTasksAsync(string username)
         {
-            var tasks = await _dbContext.TodoTask.Where(u => u.User.UserName == username).ToListAsync();
+            var tasks = await _dbContext.TodoTask.Where(u => u.User.UserName == username).Include(t => t.TodoTaskList).ToListAsync();
             return tasks;
         }
 
@@ -23,6 +23,12 @@ namespace TodoList.Services
         {
             await _dbContext.TodoTask.AddAsync(todoTask);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<TodoTask> GetTodoTaskAsync(int id)
+        {
+            var todoTask = await _dbContext.TodoTask.Include(t => t.TodoTaskList).FirstAsync(t => t.Id == id);
+            return todoTask;
         }
     }
 }

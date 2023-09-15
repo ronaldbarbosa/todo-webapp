@@ -1,0 +1,11 @@
+﻿@model TodoList.Models.TodoTask
+
+<div>
+    <p>@Model.Title</p>
+    <p>@Model.Description</p>
+    <p>
+        <span>@Html.DisplayNameFor(model => model.TodoTaskList):</span>
+        <span>@Model.TodoTaskList?.Title</span>
+    </p>
+    <span>@Model.DueDate.ToLongDateString()</span>
+</div>

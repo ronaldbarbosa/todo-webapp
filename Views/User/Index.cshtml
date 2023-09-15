@@ -23,13 +23,19 @@
                 </div>
                 <div class="">
                     <h3 class="mt-5">Tarefas</h3>
-                    <div id="loadUpcoming" class="d-flex mx-3 justify-content-between">
+                    <div id="loadUpcoming" 
+                        class="d-flex btn justify-content-between"
+                         onmouseover="this.classList.add('bg-success', 'text-white')"
+                         onmouseout="this.classList.remove('bg-success', 'text-white')">
                         <span>Próximas</span>
-                        <span class="bg-white px-2 rounded">@Model.TodoTasks.Where(t => t.DueDate != DateTime.Today).Count()</span>
+                        <span class="bg-white px-2 rounded text-dark">@Model.TodoTasks.Where(t => t.DueDate.ToShortDateString() != DateTime.Today.ToShortDateString()).Count()</span>
                     </div>
-                    <div id="loadToday" class="d-flex mx-3 mt-3 justify-content-between">
+                    <div id="loadToday" 
+                        class="d-flex btn mt-3 justify-content-between"
+                         onmouseover="this.classList.add('bg-success', 'text-white')"
+                         onmouseout="this.classList.remove('bg-success', 'text-white')">
                         <span>Hoje</span>
-                        <span class="bg-white px-2 rounded">@Model.TodoTasks.Where(t => t.DueDate.ToShortDateString() == DateTime.Today.ToShortDateString()).Count()</span>
+                        <span class="bg-white px-2 rounded text-dark">@Model.TodoTasks.Where(t => t.DueDate.ToShortDateString() == DateTime.Today.ToShortDateString()).Count()</span>
                     </div>
                 </div>
                 <div class="mt-5">
@@ -157,10 +163,27 @@
         $("#loadToday").on("click", function (e) {
             e.preventDefault();
             $.ajax({
-                url: "/TodoTask/Index",
+                url: "/TodoTask/TodoTaskListToday",
                 method: "GET",
                 success: function (data) {
                     $("#part-2").html(data);
+                    $("#part-3").empty();
+                },
+                error: function (error) {
+                    console.error("Erro ao carregar a partial view: " + error);
+                }
+            });
+        });
+
+        // Carregar partial próximas tarefas
+        $("#loadUpcoming").on("click", function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/TodoTask/TodoTaskListUpcoming",
+                method: "GET",
+                success: function (data) {
+                    $("#part-2").html(data);
+                    $("#part-3").empty();
                 },
                 error: function (error) {
                     console.error("Erro ao carregar a partial view: " + error);

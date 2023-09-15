@@ -17,17 +17,29 @@ namespace TodoList.Controllers
             _todoTaskListService = todoTaskListService;
             _userService = userService;
         }
+        
+        public async Task<IActionResult> TodoTaskInfo(int Id)
+        {
+            var todoTask = await _todoTaskService.GetTodoTaskAsync(Id);
+            return View("_TodoTaskInfo", todoTask);
+        }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> TodoTaskListToday()
         {
             var tasks = await _todoTaskService.GetTodoTasksAsync(User.Identity.Name);
-            return View("_TodoTaskList", tasks);
+            return View("_TodoTaskListToday", tasks);
+        }
+
+        public async Task<IActionResult> TodoTaskListUpcoming()
+        {
+            var tasks = await _todoTaskService.GetTodoTasksAsync(User.Identity.Name);
+            return View("_TodoTaskListUpcoming", tasks);
         }
 
         public async Task<IActionResult> Create()
         {
             var username = User.Identity.Name;
-            var lists = await _todoTaskListService.GetTodoTaskListAsync(username);
+            var lists = await _todoTaskListService.GetTodoTaskListsAsync(username);
             var viewModel = new CreateTodoTaskViewModel() { TodoTaskLists = lists, DueDate = DateTime.Today};
             return View("_Create", viewModel);
         }
@@ -39,12 +51,14 @@ namespace TodoList.Controllers
             if (ModelState.IsValid)
             {
                 var userId = await _userService.GetUserIdAsync(User.Identity.Name);
-                var todoTask = new TodoTask() 
-                { 
+                var todoTaskList = await _todoTaskListService.GetTodoTaskListAsync(User.Identity.Name, viewModel.TodoTaskListId);
+                var todoTask = new TodoTask()
+                {
                     Title = viewModel.Title,
                     Description = viewModel.Description,
                     DueDate = viewModel.DueDate,
                     UserId = userId,
+                    TodoTaskList = todoTaskList,
                     TodoTaskListId = viewModel.TodoTaskListId
                 };
 

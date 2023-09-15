@@ -13,10 +13,16 @@ namespace TodoList.Services
             _dbContext = dbContext;
         }
 
-        public async Task<IList<TodoTaskList>> GetTodoTaskListAsync(string username)
+        public async Task<IList<TodoTaskList>> GetTodoTaskListsAsync(string username)
         {
             var lists = await _dbContext.TodoTaskList.Where(u => u.User.UserName == username).ToListAsync();
             return lists;
+        }
+
+        public async Task<TodoTaskList> GetTodoTaskListAsync(string username, int? listId)
+        {
+            var list = await _dbContext.TodoTaskList.Where(u => u.User.UserName == username).FirstAsync(l => l.Id == listId);
+            return list;
         }
     }
 }
