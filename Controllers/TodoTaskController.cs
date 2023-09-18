@@ -76,5 +76,18 @@ namespace TodoList.Controllers
             }
             return View("_Create", viewModel);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateTodoTaskStatus(int id, bool finished)
+        {
+            var todoTask = await _todoTaskService.GetTodoTaskAsync(id);
+            if (todoTask == null) 
+            {
+                return Json(new { Erro = "Erro:", Mensagem = "Usuário não encontrado" });
+            }
+            todoTask.Finished = finished;
+            await _todoTaskService.UpdateTodoTaskAsync(todoTask);
+            return Json(new { Sucesso = "Sucesso:", Mensagem = "Tarefa atualizada com sucesso" });
+        }
     }
 }

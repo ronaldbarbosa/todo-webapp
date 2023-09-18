@@ -17,7 +17,7 @@
     {
         <div class="d-flex justify-content-between mx-5">
             <div class="mt-3">
-                <input type="checkbox" />
+                <input asp-for="@todoTask.Finished" type="checkbox" class="todoTaskFinishedChk" value="@todoTask.Id" />
                 <span class="mx-3">@todoTask.Title</span>
             </div>
             <div class="mt-3">
@@ -60,6 +60,26 @@
                 },
                 error: function (error) {
                     console.error("Erro ao carregar a partial view: " + error);
+                }
+            });
+        });
+
+        $(".todoTaskFinishedChk").change(function () {
+            const id = $(this).val();
+            const finished = $(this).is(":checked");
+
+            $.ajax({
+                url: "/TodoTask/UpdateTodoTaskStatus",
+                type: "PUT",
+                data: {
+                    id: id,
+                    finished: finished
+                },
+                success: function (data) {
+                    alert(data.mensagem);
+                },
+                error: function (error) {
+                    console.error(error);
                 }
             });
         });

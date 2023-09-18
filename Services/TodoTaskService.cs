@@ -30,5 +30,11 @@ namespace TodoList.Services
             var todoTask = await _dbContext.TodoTask.Include(t => t.TodoTaskList).FirstAsync(t => t.Id == id);
             return todoTask;
         }
+
+        public async Task UpdateTodoTaskAsync(TodoTask todoTask)
+        {
+            _dbContext.TodoTask.Update(todoTask);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }
