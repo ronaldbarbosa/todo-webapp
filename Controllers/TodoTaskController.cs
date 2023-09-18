@@ -51,16 +51,25 @@ namespace TodoList.Controllers
             if (ModelState.IsValid)
             {
                 var userId = await _userService.GetUserIdAsync(User.Identity.Name);
-                var todoTaskList = await _todoTaskListService.GetTodoTaskListAsync(User.Identity.Name, viewModel.TodoTaskListId);
-                var todoTask = new TodoTask()
+                var todoTask = new TodoTask();
+                if (viewModel.TodoTaskListId != null)
                 {
-                    Title = viewModel.Title,
-                    Description = viewModel.Description,
-                    DueDate = viewModel.DueDate,
-                    UserId = userId,
-                    TodoTaskList = todoTaskList,
-                    TodoTaskListId = viewModel.TodoTaskListId
-                };
+                    var todoTaskList = await _todoTaskListService.GetTodoTaskListAsync(User.Identity.Name, viewModel.TodoTaskListId);
+
+                    todoTask.Title = viewModel.Title;
+                    todoTask.Description = viewModel.Description;
+                    todoTask.DueDate = viewModel.DueDate;
+                    todoTask.UserId = userId;
+                    todoTask.TodoTaskList = todoTaskList;
+                    todoTask.TodoTaskListId = viewModel.TodoTaskListId;
+                }
+                else
+                {
+                    todoTask.Title = viewModel.Title;
+                    todoTask.Description = viewModel.Description;
+                    todoTask.DueDate = viewModel.DueDate;
+                    todoTask.UserId = userId;
+                }
 
                 await _todoTaskService.CreateTodoTaskAsync(todoTask);
                 return RedirectToAction("Index", "User");

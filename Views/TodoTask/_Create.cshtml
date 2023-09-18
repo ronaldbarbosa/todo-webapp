@@ -14,7 +14,9 @@
             </div>
             <div class="d-flex mb-3 align-items-center">
                 <label class="fs-5 w-25">Lista</label>
-                <select asp-for="@Model.TodoTaskListId" asp-items="@(new SelectList(Model.TodoTaskLists, "Id", "Title"))" class="form-control"></select>
+                <select asp-for="@Model.TodoTaskListId" asp-items="@(new SelectList(Model.TodoTaskLists, "Id", "Title"))" class="form-control">
+                    <option value=""></option>
+                </select>
             </div>
             <div class="d-flex mb-3 align-items-center">
                 <label class="fs-5 w-25">@Html.DisplayNameFor(model => model.DueDate)</label>
