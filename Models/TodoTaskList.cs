@@ -21,5 +21,14 @@
             Color = color;
             UserId = userId;
         }
+
+        public TodoTaskList(int id, string title, string color, string userId, User user)
+        {
+            Id = id;
+            Title = title;
+            Color = color;
+            UserId = userId;
+            User = user;
+        }
     }
 }

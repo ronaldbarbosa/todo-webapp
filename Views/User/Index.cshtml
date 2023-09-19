@@ -44,7 +44,7 @@
                     {
                         @foreach (var todoTaskList in Model.TodoTaskLists)
                         {
-                            <div class="d-flex mx-3 justify-content-between">
+                            <div class="d-flex mx-3 mt-3 justify-content-between">
                                 <span class="">@todoTaskList.Title</span>
                                 <span class="bg-white px-2 rounded">@todoTaskList.TodoTasks.Count</span>
                             </div>
@@ -54,6 +54,46 @@
                     {
                         <span>Nenhuma lista de tarefas criada!</span>
                     }
+
+                    <div class="d-flex justify-content-around mt-3">
+                        <div class="d-flex align-items-center mx-2 mt-2">
+                            <button type="button" class="d-flex flex-column align-items-center btn text-success" data-bs-toggle="modal" data-bs-target="#modalTodoTaskList">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                </svg>
+                                <span>Criar Lista</span>
+                            </button>
+                        </div>
+                        <div class="mx-2 mt-2">
+                            <a asp-controller="TodoTaskList" asp-action="Index" class="d-flex flex-column align-items-center btn text-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                </svg>
+                                <span>Editar Listas</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="modalTodoTaskList" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title fs-5" id="exampleModalLabel">Criar nova lista de tarefas</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <span class="form-label">Título</span>
+                                    <input type="text" class="form-control" id="todoTaskListTitle" value="" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    <button type="button" id="todoTaskListTitleBtn" class="btn btn-success">Criar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="mt-5">
                     <h3>Tags</h3>
@@ -142,22 +182,42 @@
         // Adicionar tag: pegar o botão do modal para monitorar o evento de click
         $("#valorTagBtn").click(function () {
             var valorTag = $("#valorTag").val();
-            console.log(valorTag)
             $.ajax({
                 url: "/Tag/Create",
                 type: "POST",
                 data: { title: valorTag },
                 success: function (result) {
                     $("#modalTag").modal("hide");
-                    alert(result.result)
+                    alert(result.result);
                     location.reload();
                 },
                 error: function (error) {
                     alert("Ocorreu um erro na criação da tag. \n", error);
-                    console.log(error);
+                    console.error(error);
                 }
             });
         });
+
+        // Adicionar Lista de tarefas
+        $("#todoTaskListTitleBtn").click(function () {
+            const title = $("#todoTaskListTitle").val();
+            $.ajax({
+                url: "/TodoTaskList/Create",
+                type: "POST",
+                data: { title: title },
+                success: function (result) {
+                    $("#modalTodoTaskList").modal("hide");
+                    alert(result.result);
+                    location.reload();
+                },
+                error: function (error) {
+                    alert("Ocorreu um erro na criação da lista. \n", error);
+                    console.error(error);
+                }
+            });
+        });
+
+        // Todo: carregar partial tarefas da lista
 
         // Carregar partial tarefas hoje
         $("#loadToday").on("click", function (e) {
