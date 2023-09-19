@@ -21,7 +21,15 @@ namespace TodoList.Controllers
         public async Task<IActionResult> TodoTaskInfo(int Id)
         {
             var todoTask = await _todoTaskService.GetTodoTaskAsync(Id);
-            return View("_TodoTaskInfo", todoTask);
+            var viewModel = new EditTodoTaskViewModel {
+                Id = todoTask.Id,
+                Title = todoTask.Title,
+                Description = todoTask.Description,
+                DueDate = todoTask.DueDate,
+                TodoTaskLists = await _todoTaskListService.GetTodoTaskListsAsync(User.Identity.Name),
+                TodoTaskListId = todoTask.TodoTaskListId,
+            };
+            return View("_TodoTaskInfo", viewModel);
         }
 
         public async Task<IActionResult> TodoTaskListToday()
@@ -75,6 +83,34 @@ namespace TodoList.Controllers
                 return RedirectToAction("Index", "User");
             }
             return View("_Create", viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(EditTodoTaskViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var todoTask = await _todoTaskService.GetTodoTaskAsync(viewModel.Id);
+                if (todoTask != null)
+                {
+                    todoTask.Title = viewModel.Title;
+                    todoTask.Description = viewModel.Description;
+                    todoTask.DueDate= viewModel.DueDate;
+                    todoTask.TodoTaskListId = viewModel.TodoTaskListId;
+
+                    if (viewModel.TodoTaskListId != null)
+                    {
+                        todoTask.TodoTaskList = await _todoTaskListService.GetTodoTaskListAsync(User.Identity.Name, todoTask.TodoTaskListId);
+                    }
+
+                    await _todoTaskService.UpdateTodoTaskAsync(todoTask);
+                    viewModel.TodoTaskLists = await _todoTaskListService.GetTodoTaskListsAsync(User.Identity.Name);
+
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            return View("_TodoTaskInfo");
         }
 
         [HttpPut]

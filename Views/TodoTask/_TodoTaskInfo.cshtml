@@ -1,11 +1,42 @@
-﻿@model TodoList.Models.TodoTask
+﻿@model TodoList.Models.ViewModels.EditTodoTaskViewModel
 
-<div>
-    <p>@Model.Title</p>
-    <p>@Model.Description</p>
-    <p>
-        <span>@Html.DisplayNameFor(model => model.TodoTaskList):</span>
-        <span>@Model.TodoTaskList?.Title</span>
-    </p>
-    <span>@Model.DueDate.ToLongDateString()</span>
+<div class="d-flex flex-column m-3 h-100">
+    <h3>Tarefa</h3>
+    <form asp-action="Update" asp-controller="TodoTask" method="post" class="d-flex flex-column justify-content-between h-100">
+        <div class="">
+            <input type="hidden" asp-for="@Model.Id" />
+            <div class="form-floating mb-3">
+                <input asp-for="@Model.Title" type="text" class="form-control" />
+                <label asp-for="@Model.Title">@Html.DisplayNameFor(model => model.Title)</label>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea asp-for="@Model.Description" class="form-control" style="height: 100px"></textarea>
+                <label asp-for="@Model.Description">@Html.DisplayNameFor(model => model.Description)</label>
+            </div>
+            <div class="d-flex mb-3 align-items-center">
+                <label class="fs-5 w-25">Lista</label>
+                <select asp-for="@Model.TodoTaskListId" asp-items="@(new SelectList(Model.TodoTaskLists, "Id", "Title"))" class="form-control">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="d-flex mb-3 align-items-center">
+                <label class="fs-5 w-25">@Html.DisplayNameFor(model => model.DueDate)</label>
+                <input type="datetime-local" asp-for="@Model.DueDate" class="form-control" />
+            </div>
+        </div>
+        <div class="d-flex mb-5 justify-content-around">
+            <a class="btn btn-secondary w-25 mx-2" id="closeForm">Cancelar</a>
+            <button type="submit" class="btn btn-warning w-25">Atualizar tarefa</button>
+        </div>
+    </form>
 </div>
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#closeForm").on("click", function (e) {
+            e.preventDefault();
+            $("#part-3").empty();
+        });
+    });
+</script>
