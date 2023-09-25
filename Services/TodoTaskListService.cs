@@ -21,7 +21,7 @@ namespace TodoList.Services
 
         public async Task<TodoTaskList> GetTodoTaskListAsync(string username, int? listId)
         {
-            var list = await _dbContext.TodoTaskList.Where(u => u.User.UserName == username).FirstAsync(l => l.Id == listId);
+            var list = await _dbContext.TodoTaskList.Where(u => u.User.UserName == username).Include(l => l.TodoTasks).FirstAsync(l => l.Id == listId);
             return list;
         }
 

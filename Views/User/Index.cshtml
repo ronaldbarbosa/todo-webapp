@@ -44,9 +44,12 @@
                     {
                         @foreach (var todoTaskList in Model.TodoTaskLists)
                         {
-                            <div class="d-flex mx-3 mt-3 justify-content-between">
+                            <div id="@todoTaskList.Id"
+                                 class="d-flex btn mx-3 mt-3 justify-content-between loadList"
+                                 onmouseover="this.classList.add('bg-success', 'text-white')"
+                                 onmouseout="this.classList.remove('bg-success', 'text-white')">
                                 <span class="">@todoTaskList.Title</span>
-                                <span class="bg-white px-2 rounded">@todoTaskList.TodoTasks.Count</span>
+                                <span class="bg-white px-2 rounded text-dark">@todoTaskList.TodoTasks.Count</span>
                             </div>
                         }
                     }
@@ -247,6 +250,24 @@
                 },
                 error: function (error) {
                     console.error("Erro ao carregar a partial view: " + error);
+                }
+            });
+        });
+
+        // Carregar partial lista de tarefas
+        $(".loadList").on("click", function (e) {
+            e.preventDefault();
+            const listId = $(this).attr("id");
+            
+            $.ajax({
+                url: "/TodoTaskList/GetTodoTaskList",
+                method: "GET",
+                data: { id: listId },
+                success: function (data) {
+                    $("#part-2").html(data);
+                },
+                error: function (error) {
+                    console.error("Erro ao carregar partial view: " + error);
                 }
             });
         });

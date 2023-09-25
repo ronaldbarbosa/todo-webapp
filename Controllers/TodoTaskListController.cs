@@ -18,6 +18,12 @@ namespace TodoList.Controllers
             return View("Index");
         }
 
+        public async Task<IActionResult> GetTodoTaskList(int id)
+        {
+            var todoTaskList = await _todoTaskListService.GetTodoTaskListAsync(User.Identity.Name, id);
+            return View("_TodoTaskListInfo", todoTaskList);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(string title)
         {
